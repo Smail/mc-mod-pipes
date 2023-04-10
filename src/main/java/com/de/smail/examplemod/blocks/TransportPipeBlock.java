@@ -111,7 +111,6 @@ public class TransportPipeBlock extends Block {
 
                 yield Shapes.join(shape, Shapes.box(0, 0.3125, 0.3125, 1, 0.6875, 0.6875), BooleanOp.OR);
             }
-            default -> throw new IllegalStateException("Unknown case: " + connections);
         };
     }
 
@@ -351,7 +350,6 @@ public class TransportPipeBlock extends Block {
 
                 yield shape;
             }
-            default -> throw new IllegalStateException("Unknown case: " + connections);
         };
     }
 
