@@ -26,7 +26,7 @@ public class ExampleMod {
     public static final String MOD_ID = "examplemod";
     public static final DeferredRegister<Block> BLOCKS = BlocksLoader.BLOCKS;
     public static final DeferredRegister<Item> ITEMS = ItemsLoader.ITEMS;
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public ExampleMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
