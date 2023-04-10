@@ -130,10 +130,6 @@ public class TransportPipeBlock extends Block {
         return buffer[0];
     }
 
-    private static boolean isVertical(Direction direction) {
-        return direction == Direction.UP || direction == Direction.DOWN;
-    }
-
     /**
      * Rotate a VoxelShape vertically. Implicitly rotates from a horizontal direction.
      *
