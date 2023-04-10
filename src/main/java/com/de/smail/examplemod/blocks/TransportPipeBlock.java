@@ -274,7 +274,7 @@ public class TransportPipeBlock extends Block {
                     shape = rotateShapeVertical(Direction.UP, shape);
                 } else if (isWest && isSouth) {
                     shape = rotateShapeVertical(Direction.DOWN, shape);
-                    shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                    shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
                 }  else if (isAbove || isBelow) {
                     if (isAbove) shape = rotateShapeVertical(Direction.DOWN, shape);
