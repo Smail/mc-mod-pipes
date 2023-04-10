@@ -164,12 +164,6 @@ public class TransportPipeBlock extends Block {
         BlockState blockState = level.getBlockState(blockPos);
         if (!(blockState.getBlock() instanceof TransportPipeBlock)) return;
 
-        BlockPos[] neighborPositions = {blockPos.above(), blockPos.below(), blockPos.north(), blockPos.east(), blockPos.south(), blockPos.west()};
-        int numConnectedPipes = (int) Arrays.stream(neighborPositions).map(pos -> level.getBlockState(pos).getBlock()).filter(block -> block instanceof TransportPipeBlock).count();
-
-        // if get == num; return
-//        level.setBlock(blockPos, blockState.setValue(STATE, numNeighboringTransportPipes), 2);
-
         boolean isAbove = level.getBlockState(blockPos.above()).getBlock() instanceof TransportPipeBlock;
         boolean isBelow = level.getBlockState(blockPos.below()).getBlock() instanceof TransportPipeBlock;
         boolean isNorth = level.getBlockState(blockPos.north()).getBlock() instanceof TransportPipeBlock;
