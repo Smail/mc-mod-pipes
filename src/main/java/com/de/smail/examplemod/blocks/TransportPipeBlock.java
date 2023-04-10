@@ -121,8 +121,6 @@ public class TransportPipeBlock extends Block {
         if (from == to) return shape;
 
         VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
-//        System.out.println(Direction.EAST.get2DDataValue());
-
         int times = (to.ordinal() - from.get2DDataValue() + 4) % 4;
         for (int i = 0; i < times; i++) {
             buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] =
@@ -170,39 +168,13 @@ public class TransportPipeBlock extends Block {
 
     private static void updateState(BlockPos blockPos, Level level) {
         BlockState blockState = level.getBlockState(blockPos);
-
         if (!(blockState.getBlock() instanceof TransportPipeBlock)) return;
-        System.out.println("updateState");
-
-        // Bird's eye view, i.e, form top
-        boolean[][][] isTransportPipe = new boolean[3][3][3];
-
-        isTransportPipe[2][1][1] = level.getBlockState(blockPos.above()).getBlock() instanceof TransportPipeBlock;
-
-        isTransportPipe[1][0][1] = level.getBlockState(blockPos.north()).getBlock() instanceof TransportPipeBlock;
-        isTransportPipe[1][1][0] = level.getBlockState(blockPos.west()).getBlock() instanceof TransportPipeBlock;
-        isTransportPipe[1][1][1] = true; // self; must be obviously true
-        isTransportPipe[1][1][2] = level.getBlockState(blockPos.east()).getBlock() instanceof TransportPipeBlock;
-        isTransportPipe[1][2][1] = level.getBlockState(blockPos.south()).getBlock() instanceof TransportPipeBlock;
-
-        isTransportPipe[0][1][1] = level.getBlockState(blockPos.below()).getBlock() instanceof TransportPipeBlock;
-
-//        if (level.getBlockState(blockPos.east()).getBlock() instanceof TransportPipeBlock east) {
-//
-//        }
 
         BlockPos[] neighborPositions = {blockPos.above(), blockPos.below(), blockPos.north(), blockPos.east(), blockPos.south(), blockPos.west()};
         int numConnectedPipes = (int) Arrays.stream(neighborPositions).map(pos -> level.getBlockState(pos).getBlock()).filter(block -> block instanceof TransportPipeBlock).count();
 
         // if get == num; return
 //        level.setBlock(blockPos, blockState.setValue(STATE, numNeighboringTransportPipes), 2);
-
-        Block above = level.getBlockState(blockPos.above()).getBlock();
-        Block below = level.getBlockState(blockPos.below()).getBlock();
-        Block north = level.getBlockState(blockPos.north()).getBlock();
-        Block east = level.getBlockState(blockPos.east()).getBlock();
-        Block south = level.getBlockState(blockPos.south()).getBlock();
-        Block west = level.getBlockState(blockPos.west()).getBlock();
 
         boolean isAbove = level.getBlockState(blockPos.above()).getBlock() instanceof TransportPipeBlock;
         boolean isBelow = level.getBlockState(blockPos.below()).getBlock() instanceof TransportPipeBlock;
@@ -454,31 +426,6 @@ public class TransportPipeBlock extends Block {
 
         Arrays.stream(new BlockPos[]{thisPos.above(), thisPos.below(), thisPos.north(), thisPos.east(), thisPos.south(), thisPos.west()}).forEach(pos -> updateState(pos, level));
         updateState(thisPos, level);
-
-//        Block above = level.getBlockState(thisPos.above()).getBlock();
-//        Block below = level.getBlockState(thisPos.below()).getBlock();
-//        Block north = level.getBlockState(thisPos.north()).getBlock();
-//        Block east = level.getBlockState(thisPos.east()).getBlock();
-//        Block south = level.getBlockState(thisPos.south()).getBlock();
-//        Block west = level.getBlockState(thisPos.west()).getBlock();
-//
-//        if (above instanceof TransportPipeBlock) {
-//            BlockState state = level.getBlockState(thisPos.above());
-//
-////            int value = state.getValue(STATE);
-//            System.out.println("\033[1;32m" + state.getValue(STATE) + "\033[0m");
-//            level.setBlock(thisPos.above(), state.setValue(STATE, 0), 2);
-//            state.rotate(level, thisPos.above(), Rotation.CLOCKWISE_90);
-//            System.out.println("\033[1;32m" + level.getBlockState(thisPos.above()).getValue(STATE) + "\033[0m");
-//        }
-
-        System.err.println(level.getBlockState(thisPos.east()).getBlock().getClass().getSimpleName());
-
-//        if (level.getBlockState(fromPos).getBlock() instanceof TransportPipeBlock
-//                && fromBlock instanceof TransportPipeBlock) {
-//            return;
-//        }
-
 
         super.neighborChanged(blockState, level, thisPos, fromBlock, fromPos, isMoving);
     }
