@@ -195,11 +195,9 @@ public class TransportPipeBlock extends Block {
                 isNorth && isAbove || isNorth && isBelow || isSouth && isAbove || isSouth && isBelow)) {
             return Types.TWO_CORNER;
         } else if (numConnected == 3 && (isWest && isNorth && isEast || isWest && isSouth && isEast ||
-                isNorth && isEast && isSouth || isNorth && isWest && isSouth
-                ||
+                isNorth && isEast && isSouth || isNorth && isWest && isSouth ||
                 isWest && isAbove && isEast || isWest && isBelow && isEast ||
-                isNorth && isAbove && isSouth || isNorth && isBelow && isSouth
-        )) {
+                isNorth && isAbove && isSouth || isNorth && isBelow && isSouth)) {
             return Types.THREE_T;
         } else if (numConnected == 3 && (isAbove && isBelow)) {
             return Types.THREE_T_ROTATED;
