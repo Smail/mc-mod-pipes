@@ -114,11 +114,11 @@ public class TransportPipeBlock extends Block {
         };
     }
 
-    private static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape) {
-        if (from == to) return shape;
+    private static VoxelShape rotateShapeHorizontally(Direction to, VoxelShape shape) {
+        assert (to == Direction.NORTH || to == Direction.SOUTH || to == Direction.WEST || to == Direction.EAST);
 
         VoxelShape[] buffer = new VoxelShape[]{shape, Shapes.empty()};
-        int times = (to.ordinal() - from.get2DDataValue() + 4) % 4;
+        int times = (to.ordinal() - Direction.NORTH.get2DDataValue() + 4) % 4;
         for (int i = 0; i < times; i++) {
             buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] =
                     Shapes.or(buffer[1], Shapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)));
@@ -246,16 +246,16 @@ public class TransportPipeBlock extends Block {
         return switch (connections) {
             case ZERO_UNCONNECTED, SIX_ALL -> shape;
             case ONE_DEAD_END -> {
-                if (isWest) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
-                else if (isSouth) shape = rotateShape(Direction.NORTH, Direction.WEST, shape);
-                else if (isEast) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                if (isWest) shape = rotateShapeHorizontally(Direction.EAST, shape);
+                else if (isSouth) shape = rotateShapeHorizontally(Direction.WEST, shape);
+                else if (isEast) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                 else if (isAbove) shape = rotateShapeVertical(Direction.UP, shape);
                 else if (isBelow) shape = rotateShapeVertical(Direction.DOWN, shape);
 
                 yield shape;
             }
             case TWO_PIPE -> {
-                if (isWest) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
+                if (isWest) shape = rotateShapeHorizontally(Direction.EAST, shape);
                 else if (isAbove) shape = rotateShapeVertical(Direction.UP, shape);
 
                 yield shape;
@@ -263,16 +263,16 @@ public class TransportPipeBlock extends Block {
             case TWO_CORNER -> {
                 // Rotate first vertically and then horizontally
                 if (isWest && isNorth) {
-                    shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                    shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
                 } else if (isEast && isNorth) {
                     shape = rotateShapeVertical(Direction.UP, shape);
-                    shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                    shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
                 } else if (isEast && isSouth) {
                     shape = rotateShapeVertical(Direction.UP, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
-                    shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                    shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
                 } else if (isWest && isSouth) {
                     shape = rotateShapeVertical(Direction.DOWN, shape);
@@ -280,9 +280,9 @@ public class TransportPipeBlock extends Block {
                     shape = rotateShapeVertical(Direction.UP, shape);
                 }  else if (isAbove || isBelow) {
                     if (isAbove) shape = rotateShapeVertical(Direction.DOWN, shape);
-                    if (isNorth) shape = rotateShape(Direction.NORTH, Direction.WEST, shape);
-                    else if (isWest) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
-                    else if (isEast) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
+                    if (isNorth) shape = rotateShapeHorizontally(Direction.WEST, shape);
+                    else if (isWest) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
+                    else if (isEast) shape = rotateShapeHorizontally(Direction.EAST, shape);
                 }
 
                 yield shape;
@@ -293,19 +293,19 @@ public class TransportPipeBlock extends Block {
                 if (isAbove && !isBelow) shape = rotateShapeVertical(Direction.UP, shape);
                 else if (isBelow && !isAbove) shape = rotateShapeVertical(Direction.DOWN, shape);
 
-                if (isVertical && isNorth && isSouth) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
-                else if (isEast && isSouth && isWest) shape = rotateShape(Direction.NORTH, Direction.WEST, shape);
-                else if (isEast && isSouth && isNorth) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
-                else if (isNorth && isSouth && isWest) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
+                if (isVertical && isNorth && isSouth) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
+                else if (isEast && isSouth && isWest) shape = rotateShapeHorizontally(Direction.WEST, shape);
+                else if (isEast && isSouth && isNorth) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
+                else if (isNorth && isSouth && isWest) shape = rotateShapeHorizontally(Direction.EAST, shape);
 
                 yield shape;
             }
             case THREE_T_ROTATED -> {
                 assert isAbove && isBelow;
 
-                if (isSouth) shape = rotateShape(Direction.NORTH, Direction.WEST, shape);
-                else if (isWest) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
-                else if (isEast) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                if (isSouth) shape = rotateShapeHorizontally(Direction.WEST, shape);
+                else if (isWest) shape = rotateShapeHorizontally(Direction.EAST, shape);
+                else if (isEast) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
 
                 yield shape;
             }
@@ -313,30 +313,30 @@ public class TransportPipeBlock extends Block {
                 // Default voxel shape is with a connected pipe below
                 if (isAbove) shape = rotateShapeVertical(Direction.DOWN, shape);
 
-                if (isNorth && isWest) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
-                else if (isNorth && isEast) shape = rotateShape(Direction.NORTH, Direction.WEST, shape);
-                else if (isSouth && isEast) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
+                if (isNorth && isWest) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
+                else if (isNorth && isEast) shape = rotateShapeHorizontally(Direction.WEST, shape);
+                else if (isSouth && isEast) shape = rotateShapeHorizontally(Direction.EAST, shape);
 
                 yield shape;
             }
             case FOUR_T -> {
                 // Default voxel shape is with a connected pipe below
                 if (isAbove) {
-                    shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                    shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.DOWN, shape);
                 }
 
-                if (isEast && isSouth && isWest) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
-                else if (isNorth && isSouth && isWest) shape = rotateShape(Direction.NORTH, Direction.WEST, shape);
-                else if (isEast && isNorth && isWest) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
+                if (isEast && isSouth && isWest) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
+                else if (isNorth && isSouth && isWest) shape = rotateShapeHorizontally(Direction.WEST, shape);
+                else if (isEast && isNorth && isWest) shape = rotateShapeHorizontally(Direction.EAST, shape);
 
-                if (isAbove) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
+                if (isAbove) shape = rotateShapeHorizontally(Direction.EAST, shape);
 
                 yield shape;
             }
             case FOUR_PLANE -> {
                 if (isAbove) shape = rotateShapeVertical(Direction.DOWN, shape);
-                if (isNorth) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                if (isNorth) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
 
                 yield shape;
             }
@@ -344,8 +344,8 @@ public class TransportPipeBlock extends Block {
                 if (!isSouth) shape = rotateShapeVertical(Direction.DOWN, shape);
                 else if (!isNorth || !isWest || !isEast || !isAbove) shape = rotateShapeVertical(Direction.UP, shape);
 
-                if (!isWest) shape = rotateShape(Direction.NORTH, Direction.EAST, shape);
-                else if (!isEast) shape = rotateShape(Direction.NORTH, Direction.SOUTH, shape);
+                if (!isWest) shape = rotateShapeHorizontally(Direction.EAST, shape);
+                else if (!isEast) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                 else if (!isAbove) shape = rotateShapeVertical(Direction.UP, shape);
 
                 yield shape;
