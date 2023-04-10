@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.de.smail.examplemod.ExampleMod.LOGGER;
+
 public class TransportPipeBlock extends Block {
     private static final BooleanProperty IS_CONNECTED_NORTH = BooleanProperty.create("is_connected_north");
     private static final BooleanProperty IS_CONNECTED_EAST = BooleanProperty.create("is_connected_east");
@@ -235,8 +237,7 @@ public class TransportPipeBlock extends Block {
             return Types.FOUR_T;
         }
 
-        System.err.println("UNKNOWN STATE - Defaulting to " + Types.TWO_PIPE);
-
+        LOGGER.error("UNKNOWN STATE - Defaulting to " + Types.TWO_PIPE);
         return Types.TWO_PIPE;
     }
 
