@@ -259,7 +259,6 @@ public class TransportPipeBlock extends Block {
                 yield shape;
             }
             case TWO_CORNER -> {
-                // Rotate first vertically and then horizontally
                 if (isWest && isNorth) {
                     shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
@@ -276,7 +275,8 @@ public class TransportPipeBlock extends Block {
                     shape = rotateShapeVertical(Direction.DOWN, shape);
                     shape = rotateShapeHorizontally(Direction.SOUTH, shape);
                     shape = rotateShapeVertical(Direction.UP, shape);
-                }  else if (isAbove || isBelow) {
+                } else if (isAbove || isBelow) {
+                    // Rotate first vertically and then horizontally
                     if (isAbove) shape = rotateShapeVertical(Direction.DOWN, shape);
                     if (isNorth) shape = rotateShapeHorizontally(Direction.WEST, shape);
                     else if (isWest) shape = rotateShapeHorizontally(Direction.SOUTH, shape);
