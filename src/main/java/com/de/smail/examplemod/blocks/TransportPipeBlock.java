@@ -425,7 +425,8 @@ public class TransportPipeBlock extends Block {
         System.err.println(fromBlock.getClass().getSimpleName());
         System.err.println(level.getBlockState(fromPos).getBlock().getClass().getSimpleName());
 
-        Arrays.stream(new BlockPos[]{thisPos.above(), thisPos.below(), thisPos.north(), thisPos.east(), thisPos.south(), thisPos.west()}).forEach(pos -> updateState(pos, level));
+        Stream.of(thisPos.above(), thisPos.below(), thisPos.north(), thisPos.east(), thisPos.south(), thisPos.west())
+                .forEach(pos -> updateState(pos, level));
         updateState(thisPos, level);
 
         super.neighborChanged(blockState, level, thisPos, fromBlock, fromPos, isMoving);
