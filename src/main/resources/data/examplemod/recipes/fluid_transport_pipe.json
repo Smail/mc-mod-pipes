@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "   ",
+    "sgs"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:stone"
+    },
+    "g": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "examplemod:fluid_transport_pipe"
+  }
+} 
