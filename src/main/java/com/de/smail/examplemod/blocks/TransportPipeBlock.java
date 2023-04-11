@@ -54,7 +54,10 @@ public class TransportPipeBlock extends Block {
     }
 
     public TransportPipeBlock() {
-        this(BlockBehaviour.Properties.of(Material.STONE).dynamicShape());
+        this(BlockBehaviour.Properties.of(Material.STONE)
+                .dynamicShape()
+                .requiresCorrectToolForDrops()
+                .strength(1.5F, 6.0F));
     }
 
     private static VoxelShape createShape(Types connections) {
